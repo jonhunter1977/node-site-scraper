@@ -4,7 +4,7 @@ const promise = require('bluebird');
 const request = require('request');
 
 let debug;
-module.exports = class webRequest {
+module.exports = class WebRequest {
     constructor() {
         debug = require('debug')('node-site-scraper:webRequest');
     }

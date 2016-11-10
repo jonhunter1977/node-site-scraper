@@ -1,27 +1,31 @@
 'use strict';
 
 const promise = require('bluebird');
-const webRequest = require('./webRequest');
+const _webRequest = require('./webRequest');
 
 let debug;
-module.exports = class pageParser {
+let WebRequest = _webRequest;
+module.exports = class PageParser {
     constructor() {
         debug = require('debug')('node-site-scraper:pageParser');
     }
 
-    getProductsFromPage(url) {
+    getPage(url) {
         return new Promise((resolve, reject) => {
-            const urlPageRequest = new webRequest();
+            const urlPageRequest = new WebRequest();
             const pageData = urlPageRequest.getBodyFromUrl(url)
                 .then((pageData) => {
-                    debug(debug(new Date(), 'Data retrieved is : ' + pageData));
-                    resolve();
+                    debug(new Date(), 'Data retrieved is : ' + pageData);
+                    resolve(pageData);
                 })
                 .catch((error) => {
-                    debug(debug(new Date(), 'Error getting web page data : ' + error));
+                    debug(new Date(), 'Error getting web page data : ' + error);
                     reject();
                 });
         });
+    };
+
+    selectHtml(pageHtml, selector) {
 
     }
 };

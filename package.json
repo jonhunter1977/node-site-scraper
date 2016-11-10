@@ -5,16 +5,19 @@
   "main": "app.js",
   "scripts": {
     "start": "export DEBUG=*&&node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "export DEBUG=&&mocha"
   },
   "author": "Jon Hunter",
   "license": "ISC",
   "devDependencies": {
-    "expect.js": "^0.3.1",
-    "mocha": "^3.1.2"
+    "deride": "^1.1.0",
+    "mocha": "^3.1.2",
+    "rewire": "^2.5.2",
+    "should": "^11.1.1"
   },
   "dependencies": {
     "bluebird": "^3.4.6",
+    "cheerio": "^0.22.0",
     "debug": "^2.3.0",
     "request": "^2.78.0"
   }
