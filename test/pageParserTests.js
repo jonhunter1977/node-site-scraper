@@ -9,32 +9,37 @@ const PageParser = rewire('../pageParser');
 
 describe('pageParser', function() {
 
-    let pageParser;
     const testHtml = fs.readFileSync('./test/test_data/test-scraped-page.html', 'utf8');
 
     beforeEach(() => {
         //Create the stub object using deride and add the stub methods you want to the object
-        const webRequest = deride.stub(['getPage']);
-        webRequest.setup.getPage.toResolveWith(testHtml);
+        const webRequest = deride.stub(['getBodyFromUrl']);
+        webRequest.setup.getBodyFromUrl.toResolveWith(testHtml);
+
+        //Wrap the stub in a function so it behaves like a class
+        const WebRequest = function () { return webRequest; };
 
         //rewire the WebRequest object on the PageParser
-        PageParser.__set__('WebRequest', () => webRequest);
-
-        pageParser = new PageParser();
+        //TODO webRequest needs to be a function which returns the mock object with the getPage method
+        PageParser.__set__('WebRequest', WebRequest);
     });
 
     describe('getPage', () => {
 
         it('should return the expected html', () => {
+            const pageParser = new PageParser();
             return pageParser.getPage('').should.be.fulfilled(testHtml);
         });
     });
 
     describe('selectHtml', function() {
 
-        it('should return a list of 7 elements', () => {
+        it('should return a <ul> with 7 <li> elements', () => {
+            const pageParser = new PageParser();
             return pageParser.selectHtml(testHtml, '#productLister > ul')
                 .then((selectedHtml) => {
+                    console.log(selectedHtml.text);
+                    selectedHtml.
                     selectedHtml.length.should.eql(7);
                 });
         });

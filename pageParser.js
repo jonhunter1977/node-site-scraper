@@ -6,6 +6,7 @@ const cheerio = require('cheerio');
 
 let debug;
 let WebRequest = _webRequest;
+
 module.exports = class PageParser {
     constructor() {
         debug = require('debug')('node-site-scraper:pageParser');
