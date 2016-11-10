@@ -10,38 +10,33 @@ const PageParser = rewire('../pageParser');
 describe('pageParser', function() {
 
     let pageParser;
-    let returnedPageHtml;
+    const testHtml = fs.readFileSync('./test/test_data/test-scraped-page.html', 'utf8');
 
-    describe('getElementFromPage', function() {
+    beforeEach(() => {
+        //Create the stub object using deride and add the stub methods you want to the object
+        const webRequest = deride.stub(['getPage']);
+        webRequest.setup.getPage.toResolveWith(testHtml);
 
-        beforeEach(function() {
-            const testData = fs.readFileSync('./test/test_data/test-scraped-page.html');
+        //rewire the WebRequest object on the PageParser
+        PageParser.__set__('WebRequest', () => webRequest);
 
-            //Create the stub object using deride and add the stub methods you want to the object
-            const webRequest = deride.stub(['getBodyFromUrl']);
-            webRequest.setup.getBodyFromUrl.toResolveWith(testData);
+        pageParser = new PageParser();
+    });
 
-            //rewire the WebRequest object on the PageParser
-            PageParser.__set__('WebRequest', () => webRequest);
+    describe('getPage', () => {
 
-            pageParser = new PageParser();
-            pageParser.getPage('')
-                .then((pageData) => {
-                    returnedPageHtml = pageData;
-                    pageParser.getPage('').should.be.fulfilled(testData);
-                });
-        });
-
-        it('should return a list of 7 elements', function() {
-            console.log(returnedPageHtml);
-            pageParser.selectHtml(returnedPageHtml)
-                .then((productList) => {
-                    productList.length.should.eql(7);
-                })
-                .catch((error) => {
-                    assert.fail();
-                });
+        it('should return the expected html', () => {
+            return pageParser.getPage('').should.be.fulfilled(testHtml);
         });
     });
 
+    describe('selectHtml', function() {
+
+        it('should return a list of 7 elements', () => {
+            return pageParser.selectHtml(testHtml, '#productLister > ul')
+                .then((selectedHtml) => {
+                    selectedHtml.length.should.eql(7);
+                });
+        });
+    });
 });

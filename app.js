@@ -1,13 +1,13 @@
 const Promise = require('bluebird');
-const pageParser = require('./pageParser');
+const PageParser = require('./pageParser');
 const debug = require('debug')('node-site-scraper:app');
 
 debug(new Date(), 'Start scrape');
 
 const ripeFruitsPageUrl = 'http://hiring-tests.s3-website-eu-west-1.amazonaws.com/2015_Developer_Scrape/5_products.html';
-const ripeFruitsPageParser = new pageParser();
-const ripeFruitsPage = ripeFruitsPageParser.getProductsFromPage(ripeFruitsPageUrl)
-    .then((data) => {
+const ripeFruitsPageParser = new PageParser();
+const ripeFruitsPage = ripeFruitsPageParser.getPage(ripeFruitsPageUrl)
+    .then((pageHtml) => {
         debug(debug(new Date(), 'All done!'));
     })
     .catch(() => {

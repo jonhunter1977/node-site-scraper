@@ -2,6 +2,7 @@
 
 const promise = require('bluebird');
 const _webRequest = require('./webRequest');
+const cheerio = require('cheerio');
 
 let debug;
 let WebRequest = _webRequest;
@@ -25,7 +26,10 @@ module.exports = class PageParser {
         });
     };
 
-    selectHtml(pageHtml, selector) {
-
-    }
+    selectHtml(html, selector) {
+        return new Promise((resolve, reject) => {
+            let $ = cheerio.load(html);
+            resolve($(selector));
+        });
+    };
 };
