@@ -1,11 +1,19 @@
-- Use request to get web page
-- PromisifyAll on request
-- Do a promise.all to get all the web pages at the same time
-- Could each fetch of web page and the parsing of it to get data be done asynchronously? SURELY YES!!
+# Node Site Scraper
 
+## System Requirements
 
-Test
-- Use proxyquire to override data returned from web request
-- Test to make sure element selection works correctly
-- Test to ensure that totalling of the array of objects works correctly (that can be TDD'd surely)
-- Test to ensure that correct object is built from data returned
+- NodeJS v4.6
+
+## Installation Instructions
+
+- Clone this repository
+- Navigate to the directory to where it is cloned
+- Type `npm install`
+
+## To Run the App
+
+- Type `npm start`
+
+## To Run Tests
+
+- Type `npm test`

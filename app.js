@@ -19,7 +19,6 @@ const ripeFruitsPage = pageParser.getPage(ripeFruitsPageUrl)
         return ripeFruitsProductListParser.getProductsFromHtml(ripeFruitsProductListHtml);
     })
     .then((ripeFruitsProductList) => {
-        console.log(ripeFruitsProductList);
         let promises = [];
         _.each(ripeFruitsProductList.products, (product) => {
             promises.push(pageParser.getPage(product.link));
@@ -30,7 +29,10 @@ const ripeFruitsPage = pageParser.getPage(ripeFruitsPageUrl)
     .then((resolvedPromises, ripeFruitsProductList) => {
         _.each(resolvedPromises, (ripeFruitProductPageHtml) => {
             console.log(Buffer.byteLength(ripeFruitProductPageHtml, 'utf8') + " bytes");
-            //pageParser.selectHtml()
+            pageParser.selectHtml(ripeFruitProductPageHtml, '.productText')
+            .then((productDescriptionHtml) => {
+              console.log(productDescriptionHtml);
+            });
         });
     })
     .catch((error) => {
