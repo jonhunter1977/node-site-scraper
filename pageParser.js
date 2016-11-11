@@ -29,8 +29,8 @@ module.exports = class PageParser {
 
     selectHtml(html, selector) {
         return new Promise((resolve, reject) => {
-            let $ = cheerio.load(html);
-            resolve($(selector));
+            let $ = cheerio.load(html);        
+            resolve($(selector).html());
         });
     };
 };
