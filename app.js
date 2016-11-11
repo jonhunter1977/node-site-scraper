@@ -5,9 +5,7 @@ const Promise = require('bluebird');
 const _ = require('lodash');
 const PageParser = require('./pageParser');
 const ProductListParser = require('./productListParser');
-const ProductDataBuilder = require('./productDataBuilder')
-
-debug(new Date(), 'Start scrape');
+const ProductDataBuilder = require('./productDataBuilder');
 
 const ripeFruitsPageUrl = 'http://hiring-tests.s3-website-eu-west-1.amazonaws.com/2015_Developer_Scrape/5_products.html';
 const pageParser = new PageParser();
@@ -29,9 +27,22 @@ const ripeFruitsPage = pageParser.getPage(ripeFruitsPageUrl)
         return Promise.all(promises);
     })
     .then((resolvedPromises) => {
+        let finalData = {
+            results: [],
+        };
+
         _.each(resolvedPromises, (builtProduct) => {
-            debug(new Date(), builtProduct);
+            finalData.results.push(builtProduct);
         });
+
+        finalData.total = productDataBuilder.getTotalCostOfProducts(finalData.results);
+
+        debug('=======================================');
+        debug('Product detail on page is as follows');
+        debug('=======================================');
+        debug('\n', finalData);
+        debug('=======================================');
+
     })
     .catch((error) => {
         debug(new Date(), 'Oops something went wrong : ' + error);

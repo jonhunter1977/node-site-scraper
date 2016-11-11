@@ -1,6 +1,7 @@
 'use strict';
 
 const Promise = require('bluebird');
+const _ = require('lodash');
 const PageParser = require('./pageParser');
 const Helpers = require('./helpers');
 
@@ -30,10 +31,19 @@ module.exports = class ProductDataBuilder {
                     return Promise.resolve();
                 })
                 .then(() => {
-                  let unitPrice = Helpers.trimUnwantedCharactersFromString(product.unit_price);
-                  builtProduct.unit_price = parseFloat(Helpers.trimNoneNumericCharactersFromString(unitPrice)).toFixed(2);
-                  return resolve(builtProduct);
+                    let unitPrice = Helpers.trimUnwantedCharactersFromString(product.unit_price);
+                    builtProduct.unit_price = parseFloat(Helpers.trimNoneNumericCharactersFromString(unitPrice)).toFixed(2);
+                    return resolve(builtProduct);
                 })
         });
+    }
+
+    getTotalCostOfProducts(products) {
+        let unitPriceTotal = 0;
+        unitPriceTotal = _.sumBy(products, (product) => {
+            return parseFloat(product.unit_price);
+        });
+
+        return unitPriceTotal.toFixed(2);
     }
 };
