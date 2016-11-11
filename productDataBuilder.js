@@ -20,12 +20,11 @@ module.exports = class ProductDataBuilder {
 
             pageParser.getPage(product.link)
                 .then((ripeFruitProductPageHtml) => {
-                    debug(new Date(), Buffer.byteLength(ripeFruitProductPageHtml, 'utf8') + " bytes");
-                    builtProduct.size = Buffer.byteLength(ripeFruitProductPageHtml, 'utf8') + " bytes";
+                    let productPageSize = parseFloat(Buffer.byteLength(ripeFruitProductPageHtml, 'utf8') / 1000).toFixed(2);
+                    builtProduct.size = productPageSize + " kb";
                     return pageParser.selectHtml(ripeFruitProductPageHtml, '.productText > p');
                 })
                 .then((productDescriptionHtml) => {
-                    debug(new Date(), productDescriptionHtml);
                     builtProduct.description = productDescriptionHtml;
 
                     return Promise.resolve();
