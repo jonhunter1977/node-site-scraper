@@ -4,12 +4,14 @@ const debug = require('debug')('node-site-scraper:app');
 const Promise = require('bluebird');
 const _ = require('lodash');
 const PageParser = require('./pageParser');
-const ProductListParser = require('./ProductListParser');
+const ProductListParser = require('./productListParser');
+const ProductDataBuilder = require('./productDataBuilder')
 
 debug(new Date(), 'Start scrape');
 
 const ripeFruitsPageUrl = 'http://hiring-tests.s3-website-eu-west-1.amazonaws.com/2015_Developer_Scrape/5_products.html';
 const pageParser = new PageParser();
+const productDataBuilder = new ProductDataBuilder();
 const ripeFruitsPage = pageParser.getPage(ripeFruitsPageUrl)
     .then((riperFruitsPageHtml) => {
         return pageParser.selectHtml(riperFruitsPageHtml, '#productLister > ul')
@@ -21,18 +23,14 @@ const ripeFruitsPage = pageParser.getPage(ripeFruitsPageUrl)
     .then((ripeFruitsProductList) => {
         let promises = [];
         _.each(ripeFruitsProductList.products, (product) => {
-            promises.push(pageParser.getPage(product.link));
+            promises.push(productDataBuilder.buildProductData(product));
         });
 
-        return Promise.all(promises, ripeFruitsProductList)
+        return Promise.all(promises)
     })
-    .then((resolvedPromises, ripeFruitsProductList) => {
-        _.each(resolvedPromises, (ripeFruitProductPageHtml) => {
-            console.log(Buffer.byteLength(ripeFruitProductPageHtml, 'utf8') + " bytes");
-            pageParser.selectHtml(ripeFruitProductPageHtml, '.productText')
-            .then((productDescriptionHtml) => {
-              console.log(productDescriptionHtml);
-            });
+    .then((resolvedPromises) => {
+        _.each(resolvedPromises, (builtProduct) => {
+            debug(new Date(), builtProduct);
         });
     })
     .catch((error) => {

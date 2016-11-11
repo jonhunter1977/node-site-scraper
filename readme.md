@@ -7,7 +7,7 @@
 ## Installation Instructions
 
 - Clone this repository
-- Navigate to the directory to where it is cloned
+- Navigate to the directory where it is cloned
 - Type `npm install`
 
 ## To Run the App
