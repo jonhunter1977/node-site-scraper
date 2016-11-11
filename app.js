@@ -26,7 +26,7 @@ const ripeFruitsPage = pageParser.getPage(ripeFruitsPageUrl)
             promises.push(productDataBuilder.buildProductData(product));
         });
 
-        return Promise.all(promises)
+        return Promise.all(promises);
     })
     .then((resolvedPromises) => {
         _.each(resolvedPromises, (builtProduct) => {
