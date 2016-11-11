@@ -22,14 +22,11 @@ module.exports = class ProductListParser {
                 productList.products.push({
                   title: Helpers.trimUnwantedCharactersFromString($(element).find('a').text()),
                   link: $(element).find('a').attr('href'),
-                  unit_price: $(element).find('#addItem_149117 > div.pricing > p.pricePerUnit').text(),
+                  unit_price: Helpers.trimUnwantedCharactersFromString($(element).find('div.pricing > p.pricePerUnit').text()),
                 })
             });
 
             resolve(productList);
-
-            // productListHtml[0].name.should.eql('ul');
-            // productListHtml.children('li').length.should.eql(7);
         });
     };
 }

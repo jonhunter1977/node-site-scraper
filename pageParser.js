@@ -17,7 +17,6 @@ module.exports = class PageParser {
             const urlPageRequest = new WebRequest();
             const pageData = urlPageRequest.getBodyFromUrl(url)
                 .then((pageData) => {
-                    debug(new Date(), 'Data retrieved is : ' + pageData);
                     resolve(pageData);
                 })
                 .catch((error) => {
@@ -29,7 +28,7 @@ module.exports = class PageParser {
 
     selectHtml(html, selector) {
         return new Promise((resolve, reject) => {
-            let $ = cheerio.load(html);        
+            let $ = cheerio.load(html);
             resolve($(selector).html());
         });
     };

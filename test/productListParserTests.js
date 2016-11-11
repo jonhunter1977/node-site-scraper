@@ -15,7 +15,6 @@ describe('productListParser', () => {
             const productListParser = new ProductListParser();
             productListParser.getProductsFromHtml(testProductListHtml)
                 .then((productList) => {
-                    console.log(productList);
                     productList.products.length.should.eql(7);
                 });
         });

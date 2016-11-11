@@ -1,18 +1,38 @@
-const Promise = require('bluebird');
-const PageParser = require('./pageParser');
+'use strict';
+
 const debug = require('debug')('node-site-scraper:app');
+const Promise = require('bluebird');
+const _ = require('lodash');
+const PageParser = require('./pageParser');
+const ProductListParser = require('./ProductListParser');
 
 debug(new Date(), 'Start scrape');
 
 const ripeFruitsPageUrl = 'http://hiring-tests.s3-website-eu-west-1.amazonaws.com/2015_Developer_Scrape/5_products.html';
-const ripeFruitsPageParser = new PageParser();
-const ripeFruitsPage = ripeFruitsPageParser.getPage(ripeFruitsPageUrl)
+const pageParser = new PageParser();
+const ripeFruitsPage = pageParser.getPage(ripeFruitsPageUrl)
     .then((riperFruitsPageHtml) => {
-        ripeFruitsPageParser.selectHtml(riperFruitsPageHtml, '#productLister > ul')
+        return pageParser.selectHtml(riperFruitsPageHtml, '#productLister > ul')
     })
-    .then((productListSection) => {
-        debug(debug(new Date(), 'All done!'));
+    .then((ripeFruitsProductListHtml) => {
+        const ripeFruitsProductListParser = new ProductListParser(ripeFruitsProductListHtml);
+        return ripeFruitsProductListParser.getProductsFromHtml(ripeFruitsProductListHtml);
     })
-    .catch(() => {
-        debug(debug(new Date(), 'Oops something went wrong'));
+    .then((ripeFruitsProductList) => {
+        console.log(ripeFruitsProductList);
+        let promises = [];
+        _.each(ripeFruitsProductList.products, (product) => {
+            promises.push(pageParser.getPage(product.link));
+        });
+
+        return Promise.all(promises, ripeFruitsProductList)
+    })
+    .then((resolvedPromises, ripeFruitsProductList) => {
+        _.each(resolvedPromises, (ripeFruitProductPageHtml) => {
+            console.log(Buffer.byteLength(ripeFruitProductPageHtml, 'utf8') + " bytes");
+            //pageParser.selectHtml()
+        });
+    })
+    .catch((error) => {
+        debug(new Date(), 'Oops something went wrong : ' + error);
     });
