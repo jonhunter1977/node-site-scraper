@@ -12,8 +12,8 @@ module.exports = class ProductListParser {
 
     getProductsFromHtml(productListHtml) {
         return new Promise((resolve, reject) => {
-            let $ = cheerio.load(productListHtml);
-            let productList = {
+            const $ = cheerio.load(productListHtml);
+            const productList = {
                 products: []
             };
 

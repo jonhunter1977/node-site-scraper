@@ -13,23 +13,18 @@ module.exports = class PageParser {
     }
 
     getPage(url) {
-        return new Promise((resolve, reject) => {
-            const urlPageRequest = new WebRequest();
-            const pageData = urlPageRequest.getBodyFromUrl(url)
-                .then((pageData) => {
-                    resolve(pageData);
-                })
-                .catch((error) => {
-                    debug(new Date(), 'Error getting web page data : ' + error);
-                    reject();
-                });
-        });
-    };
+        const urlPageRequest = new WebRequest();
+        return urlPageRequest.getBodyFromUrl(url)
+            .then((pageData) => {
+                return pageData;
+            })
+            .catch((error) => {
+                debug(new Date(), 'Error getting web page data : ' + error);
+            });
+    }
 
     selectHtml(html, selector) {
-        return new Promise((resolve, reject) => {
-            let $ = cheerio.load(html);
-            resolve($(selector).html());
-        });
-    };
+        const $ = cheerio.load(html);
+        return $(selector).html();
+    }
 };

@@ -19,21 +19,18 @@ const ripeFruitsPage = pageParser.getPage(ripeFruitsPageUrl)
         return ripeFruitsProductListParser.getProductsFromHtml(ripeFruitsProductListHtml);
     })
     .then((ripeFruitsProductList) => {
-        let promises = [];
-        _.each(ripeFruitsProductList.products, (product) => {
-            promises.push(productDataBuilder.buildProductData(product));
+        const promises = _.map(ripeFruitsProductList.products, (product) => {
+            return productDataBuilder.buildProductData(product);
         });
 
         return Promise.all(promises);
     })
     .then((resolvedPromises) => {
-        let finalData = {
-            results: [],
-        };
+        const finalData = {};
 
-        _.each(resolvedPromises, (builtProduct) => {
-            finalData.results.push(builtProduct);
-        });
+        finalData.results = _.map(resolvedPromises, (builtProduct) => {
+            return builtProduct;
+        })
 
         finalData.total = productDataBuilder.getTotalCostOfProducts(finalData.results);
 

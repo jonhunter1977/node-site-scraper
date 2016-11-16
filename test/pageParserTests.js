@@ -37,10 +37,8 @@ describe('pageParser', function() {
 
         it('should return the product list html', () => {
             const pageParser = new PageParser();
-            return pageParser.selectHtml(testScrapedPageHtml, '#productLister > ul')
-                .then((productListHtml) => {
-                    should.equal(productListHtml, testProductListHtml);
-                });
+            const productListHtml = pageParser.selectHtml(testScrapedPageHtml, '#productLister > ul');
+            should.equal(productListHtml, testProductListHtml);
         });
     });
 });

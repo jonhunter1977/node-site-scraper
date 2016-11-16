@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "export DEBUG=*&&node app.js",
-    "test": "export DEBUG=&&mocha"
+    "test": "istanbul --include-all-sources cover ./node_modules/mocha/bin/_mocha --  --colors -R spec --recursive test --type lcov --print detail"
   },
   "author": "Jon Hunter",
   "license": "ISC",

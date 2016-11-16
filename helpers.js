@@ -1,19 +1,17 @@
 'use strict';
 
-let debug;
+module.exports = function() {
 
-class Helpers {
-    constructor() {
-        debug = require('debug')('node-site-scraper:Helpers');
-    }
-
-    trimUnwantedCharactersFromString(stringToTrim) {
+    const trimUnwantedCharactersFromString = function(stringToTrim) {
         return stringToTrim.replace(/\s+/g, ' ').trim();
     };
 
-    trimNoneNumericCharactersFromString(stringToTrim) {
-      return stringToTrim.replace(/[^\d.-]/g, '').trim();
+    const trimNoneNumericCharactersFromString = function(stringToTrim) {
+        return stringToTrim.replace(/[^\d.-]/g, '').trim();
     };
-};
 
-module.exports = new Helpers();
+    return {
+        trimUnwantedCharactersFromString: trimUnwantedCharactersFromString,
+        trimNoneNumericCharactersFromString: trimNoneNumericCharactersFromString
+    }
+}();
